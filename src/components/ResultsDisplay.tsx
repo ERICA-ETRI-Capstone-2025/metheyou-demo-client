@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import './ResultsDisplay.css'
-import { getTaskStatus, getAnalysisInfo, getStatusMessage, TaskStatus, AnalysisInfoResponse } from '../services/apiService'
+import { getTaskStatus, getAnalysisInfo, getStatusMessage } from '../services/apiService'
+import type { TaskStatus, AnalysisInfoResponse } from '../services/apiService'
 
 interface ResultsDisplayProps {
   taskId: string

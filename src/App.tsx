@@ -50,8 +50,7 @@ function App() {
         {/* Footer */}
         <footer className="footer">
           <p>
-            Powered by Whisper AI, Gemini, and FFmpeg | 
-            <a href={`${API_URL}/docs`} target="_blank" rel="noopener noreferrer"> API Docs</a>
+            Powered by Whisper AI, Gemini, and FFmpeg
           </p>
         </footer>
       </div>
