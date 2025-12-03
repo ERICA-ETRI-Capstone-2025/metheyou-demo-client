@@ -52,7 +52,7 @@ function App() {
         {/* Footer */}
         <footer className="footer">
           <p>
-            한양대학교 ERICA 소프트트웨어융합학부 캡스톤 × ETRI
+            <b>METHEYOU:</b> 한양대학교 ERICA 소프트웨어융합학부 × ETRI
           </p>
         </footer>
       </div>
