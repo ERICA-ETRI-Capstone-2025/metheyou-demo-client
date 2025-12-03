@@ -1,0 +1,72 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
+}
+
+.navbar-logo {
+  height: 50px;
+  object-fit: contain;
+}
+
+.hy-etri-logo {
+  max-width: 220px;
+}
+
+.etrica-logo {
+  max-width: 100px;
+}
+
+.container {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-lg);
+}
+
+/* Main Content */
+.main-content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-content.main-content-centered {
+  justify-content: center;
+  min-height: calc(100vh - 200px);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: var(--spacing-lg) 0;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  border-top: 1px solid #e5e7eb;
+  margin-top: auto;
+}
+
+.footer a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  margin-left: var(--spacing-xs);
+  transition: color var(--transition-fast);
+}
+
+.footer a:hover {
+  color: var(--accent-secondary);
+}

@@ -1,0 +1,53 @@
+/* Header Styles */
+.header {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+  display: flex;
+  height: calc(100dvh - 600px);
+  min-height: 300px;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.header.header-slide-out {
+  opacity: 0;
+  transform: translateY(-50px);
+  max-height: 0;
+  padding: 0;
+  min-height: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.logo-container {
+  font-size: 6rem;
+}
+
+.logo-text {
+  font-size: 1em;
+  font-weight: 900;
+  color: var(--accent-primary); 
+}
+
+.logo-beta {
+  font-size: 0.3em;
+  font-weight: 200;
+  top: 1rem;
+  left: -0.4rem;
+  position: relative;
+  font-style: italic;
+  color: #7a7a7a;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}

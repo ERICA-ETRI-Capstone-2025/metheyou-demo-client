@@ -1,0 +1,62 @@
+import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom'
+import AnalyzeForm from './components/AnalyzeForm'
+import ResultsDisplay from './components/ResultsDisplay'
+import Header from './components/Header'
+import './App.css'
+import hyXetriLogo from './assets/images/hy_x_etri.webp'
+import etricaLogo from './assets/images/etrica.webp'
+
+function MainPage() {
+  const navigate = useNavigate()
+  const handleAnalysisSubmit = (taskId: string) => {
+    navigate(`/processing/${taskId}`)
+  }
+  return <AnalyzeForm onSubmit={handleAnalysisSubmit} />
+}
+
+function ProcessingPage() {
+  const { taskid } = useParams<{ taskid: string }>()
+  const navigate = useNavigate()
+  return <ResultsDisplay taskId={taskid!} onNewAnalysis={() => navigate('/')} onDone={() => navigate(`/done/${taskid}`)} />
+}
+
+function DonePage() {
+  const { taskid } = useParams<{ taskid: string }>()
+  const navigate = useNavigate()
+  return <ResultsDisplay taskId={taskid!} onNewAnalysis={() => navigate('/')} done />
+}
+
+function App() {
+  const location = useLocation()
+  const isMainPage = location.pathname === '/'
+
+  return (
+    <div className="app">
+      <nav className="navbar">
+        <img src={hyXetriLogo} alt="HY x ETRI" className="navbar-logo hy-etri-logo" />
+        <img src={etricaLogo} alt="ETRICA" className="navbar-logo etrica-logo" />
+      </nav>
+      <div className={`container ${!isMainPage ? 'header-hidden' : ''}`}>
+        {/* Header */}
+        <Header isHidden={!isMainPage} />
+        {/* Main Content */}
+        <main className={`main-content ${!isMainPage ? 'main-content-centered' : ''}`}>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/processing/:taskid" element={<ProcessingPage />} />
+            <Route path="/done/:taskid" element={<DonePage />} />
+          </Routes>
+        </main>
+        {/* Footer */}
+        <footer className="footer">
+          <p>
+            Powered by Whisper AI, Gemini, and FFmpeg | 
+            <a href={`${API_URL}/docs`} target="_blank" rel="noopener noreferrer"> API Docs</a>
+          </p>
+        </footer>
+      </div>
+    </div>
+  )
+}
+
+export default App
