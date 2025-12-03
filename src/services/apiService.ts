@@ -1,6 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-export type TaskStatus = 'ready' | 'extract' | 'trans' | 'analysis' | 'saving' | 'success' | 'error';
+export type TaskStatus = 'ready' | 'extract' | 'trans' | 'analysis' | 'saving' | 'success' | 'error' | 'toolong';
 
 export interface SubmitAnalysisResponse {
   taskid: number | string;
@@ -12,6 +12,10 @@ export interface TaskStatusResponse {
 
 export interface AnalysisInfoResponse {
   video_id: string | number;
+  title: string;
+  duration: number;
+  channel_name: string;
+  published_at: string;
   score: number;
   description: string;
   tags: string;
@@ -63,7 +67,8 @@ export function getStatusMessage(status: TaskStatus): string {
     analysis: 'AI 분석 중...',
     saving: 'DB 업데이트 중...',
     success: '분석 완료!',
-    error: '오류 발생'
+    error: '오류 발생',
+    toolong: '영상 길이가 너무 깁니다.'
   };
   return messages[status] || '처리 중...';
 }

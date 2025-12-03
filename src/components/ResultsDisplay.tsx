@@ -36,6 +36,8 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
           }, 1000)
         } else if (response.status === 'error') {
           setError('분석 중 오류가 발생했습니다.')
+        } else if (response.status === 'toolong') {
+          setError('영상 길이가 너무 깁니다.')
         }
       } catch (err) {
         setError('상태 조회 중 오류가 발생했습니다.')
@@ -45,9 +47,9 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
     // 즉시 한번 실행
     pollStatus()
 
-    // 5초마다 폴링 (success, error가 아닐 때만)
+    // 5초마다 폴링 (success, error, toolong이 아닐 때만)
     const interval = setInterval(() => {
-      if (status !== 'success' && status !== 'error') {
+      if (status !== 'success' && status !== 'error' && status !== 'toolong') {
         pollStatus()
       }
     }, 5000)
@@ -124,27 +126,58 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
 
   // 분석 결과 표시
   const tags = analysisResult.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
-  const isSafe = analysisResult.score >= 50
+  
+  // 동영상 길이 포맷팅 (초 -> mm:ss)
+  const formatDuration = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+  
+  // 게시 날짜 포맷팅
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+  }
+  
+  // 점수 범위에 따른 분류
+  const getSafetyLevel = (score: number) => {
+    if (score >= 70) return { level: 'safe', title: '안전한 영상입니다', color: '#10b981', icon: 'check' }
+    if (score >= 40) return { level: 'warning', title: '주의가 필요한 영상입니다', color: '#f59e0b', icon: 'warning' }
+    return { level: 'dangerous', title: '유해한 영상입니다', color: '#ef4444', icon: 'cross' }
+  }
+  
+  const safetyInfo = getSafetyLevel(analysisResult.score)
 
   return (
     <div className="results-container fade-in">
       {thumbnailUrl && (
         <div className="video-card">
           <img src={thumbnailUrl} alt="Video thumbnail" className="video-thumbnail" />
+          <div className="video-info">
+            <h3 className="video-title">{analysisResult.title}</h3>
+            <div className="video-metadata">
+              <span className="metadata-item">채널: {analysisResult.channel_name}</span>
+              <span className="metadata-item">길이: {formatDuration(analysisResult.duration)}</span>
+              <span className="metadata-item">게시: {formatDate(analysisResult.published_at)}</span>
+            </div>
+          </div>
         </div>
       )}
       <div className="result-card">
         <div className="result-header">
           <svg className="check-icon" viewBox="0 0 24 24" width="32" height="32">
-            <circle cx="12" cy="12" r="11" fill={isSafe ? "#10b981" : "#ef4444"} />
-            {isSafe ? (
+            <circle cx="12" cy="12" r="11" fill={safetyInfo.color} />
+            {safetyInfo.icon === 'check' ? (
               <path d="M7 12l3 3 7-7" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            ) : safetyInfo.icon === 'warning' ? (
+              <text x="12" y="16" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold" fontFamily="Arial">!</text>
             ) : (
               <path d="M8 8l8 8M16 8l-8 8" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             )}
           </svg>
           <div>
-            <h2 className="result-title">{isSafe ? '이 영상은 안전합니다!' : '주의가 필요한 영상입니다'}</h2>
+            <h2 className="result-title" style={{ color: safetyInfo.color }}>{safetyInfo.title}</h2>
             <div className="result-score">{analysisResult.score}/100</div>
           </div>
         </div>
