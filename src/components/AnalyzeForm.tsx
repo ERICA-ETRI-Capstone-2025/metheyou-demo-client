@@ -84,10 +84,7 @@ function AnalyzeForm({ onSubmit }: AnalyzeFormProps) {
             disabled={isSubmitting}
           >
             {isSubmitting ? (
-              <>
-                <div className="spinner-small"></div>
-                분석중...
-              </>
+              <>분석중...</>
             ) : (
               <>분석 시작</>
             )}

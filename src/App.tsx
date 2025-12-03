@@ -52,7 +52,7 @@ function App() {
         {/* Footer */}
         <footer className="footer">
           <p>
-            Powered by Whisper AI, Gemini, and FFmpeg
+            한양대학교 ERICA 소프트트웨어융합학부 CAPSTONE × ETRI
           </p>
         </footer>
       </div>

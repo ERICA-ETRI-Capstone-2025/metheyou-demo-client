@@ -32,7 +32,6 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-lg);
 }
 
 /* Main Content */
@@ -56,8 +55,6 @@
   padding: var(--spacing-lg) 0;
   color: var(--text-muted);
   font-size: 0.875rem;
-  border-top: 1px solid #e5e7eb;
-  margin-top: auto;
 }
 
 .footer a {

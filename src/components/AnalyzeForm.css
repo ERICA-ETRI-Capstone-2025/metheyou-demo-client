@@ -13,10 +13,6 @@
   color: var(--text-secondary);
 }
 
-.analyze-form {
-  margin-bottom: var(--spacing-xl);
-}
-
 .input-group {
   margin-bottom: var(--spacing-md);
   text-align: left;
