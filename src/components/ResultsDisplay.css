@@ -66,6 +66,22 @@
   font-weight: 500;
 }
 
+/* Loading Thumbnail */
+.loading-thumbnail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.loading-thumbnail {
+  width: 360px;
+  height: 202.5px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
 /* Result Card */
 .result-card {
   background: white;
@@ -107,7 +123,6 @@
 }
 
 .detail-item {
-  display: flex;
   gap: var(--spacing-sm);
   color: var(--text-primary);
 }

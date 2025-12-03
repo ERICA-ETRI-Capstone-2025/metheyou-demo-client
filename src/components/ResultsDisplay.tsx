@@ -5,17 +5,19 @@ import type { TaskStatus, AnalysisInfoResponse } from '../services/apiService'
 
 interface ResultsDisplayProps {
   taskId: string
+  initialVideoId?: string
   onNewAnalysis: () => void
   onDone?: () => void
   done?: boolean
 }
 
-function ResultsDisplay({ taskId, onNewAnalysis, onDone, done }: ResultsDisplayProps) {
+function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }: ResultsDisplayProps) {
   const [status, setStatus] = useState<TaskStatus>(done ? 'success' : 'ready')
   const [statusMessage, setStatusMessage] = useState(done ? '분석 완료!' : '준비 중...')
   const [analysisResult, setAnalysisResult] = useState<AnalysisInfoResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [videoId, setVideoId] = useState<string | null>(null)
+  const [initialVideoIdState] = useState<string | null>(initialVideoId || null)
 
   // 진행 중일 때 5초마다 상태 폴링
   useEffect(() => {
@@ -60,12 +62,12 @@ function ResultsDisplay({ taskId, onNewAnalysis, onDone, done }: ResultsDisplayP
     const fetchAnalysisInfo = async () => {
       try {
         const response = await getAnalysisInfo(taskId)
-        if (response.video_id === -1) {
+        if (response.video_id === -1 || response.video_id === '-1') {
           setError('존재하지 않는 작업 ID입니다.')
           return
         }
         setAnalysisResult(response)
-        setVideoId(response.video_id as string)
+        setVideoId(String(response.video_id))
       } catch (err) {
         setError('분석 결과를 불러오는 중 오류가 발생했습니다.')
       }
@@ -92,9 +94,15 @@ function ResultsDisplay({ taskId, onNewAnalysis, onDone, done }: ResultsDisplayP
 
   // 진행 중 상태 (done이 아닐 때)
   if (!done) {
+    const displayThumbnailUrl = initialVideoIdState ? `https://i.ytimg.com/vi/${initialVideoIdState}/hq720.jpg` : null
     return (
       <div className="results-container fade-in">
         <div className="loading-message">
+          {displayThumbnailUrl && (
+            <div className="loading-thumbnail-container">
+              <img src={displayThumbnailUrl} alt="Video thumbnail" className="loading-thumbnail" />
+            </div>
+          )}
           <div className="spinner"></div>
           <p>{statusMessage}</p>
         </div>
@@ -141,9 +149,10 @@ function ResultsDisplay({ taskId, onNewAnalysis, onDone, done }: ResultsDisplayP
           </div>
         </div>
         <div className="result-details">
-          <div className="detail-item">
-            <span>{analysisResult.description}</span>
-          </div>
+          <div 
+            className="detail-item"
+            dangerouslySetInnerHTML={{ __html: analysisResult.description }}
+          />
         </div>
         {tags.length > 0 && (
           <div className="result-tags">

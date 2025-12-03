@@ -8,16 +8,18 @@ import etricaLogo from './assets/images/etrica.webp'
 
 function MainPage() {
   const navigate = useNavigate()
-  const handleAnalysisSubmit = (taskId: string) => {
-    navigate(`/processing/${taskId}`)
+  const handleAnalysisSubmit = (taskId: string, videoId?: string) => {
+    navigate(`/processing/${taskId}`, { state: { videoId } })
   }
   return <AnalyzeForm onSubmit={handleAnalysisSubmit} />
 }
 
 function ProcessingPage() {
   const { taskid } = useParams<{ taskid: string }>()
+  const location = useLocation()
+  const videoId = (location.state as any)?.videoId || null
   const navigate = useNavigate()
-  return <ResultsDisplay taskId={taskid!} onNewAnalysis={() => navigate('/')} onDone={() => navigate(`/done/${taskid}`)} />
+  return <ResultsDisplay taskId={taskid!} initialVideoId={videoId} onNewAnalysis={() => navigate('/')} onDone={() => navigate(`/done/${taskid}`)} />
 }
 
 function DonePage() {

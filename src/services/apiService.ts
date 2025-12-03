@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 export type TaskStatus = 'ready' | 'extract' | 'trans' | 'analysis' | 'saving' | 'success' | 'error';
 
 export interface SubmitAnalysisResponse {
-  taskid: string | -1;
+  taskid: number | string;
 }
 
 export interface TaskStatusResponse {
@@ -11,15 +11,15 @@ export interface TaskStatusResponse {
 }
 
 export interface AnalysisInfoResponse {
-  video_id: string | -1;
+  video_id: string | number;
   score: number;
   description: string;
   tags: string;
 }
 
-// POST /api/ai_request.php - 분석 요청
+// POST /ai_request.php - 분석 요청
 export async function submitAnalysis(videoId: string): Promise<SubmitAnalysisResponse> {
-  const response = await fetch(`${API_URL}/api/ai_request.php`, {
+  const response = await fetch(`${API_URL}/ai_request.php`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: videoId })
@@ -30,9 +30,9 @@ export async function submitAnalysis(videoId: string): Promise<SubmitAnalysisRes
   return await response.json();
 }
 
-// GET /api/ai_status.php?tid={taskid} - 작업 상태 조회
+// GET /ai_status.php?tid={taskid} - 작업 상태 조회
 export async function getTaskStatus(taskId: string): Promise<TaskStatusResponse> {
-  const response = await fetch(`${API_URL}/api/ai_status.php?tid=${taskId}`, {
+  const response = await fetch(`${API_URL}/ai_status.php?tid=${taskId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
@@ -42,9 +42,9 @@ export async function getTaskStatus(taskId: string): Promise<TaskStatusResponse>
   return await response.json();
 }
 
-// GET /api/analysis_info.php?tid={taskid} - 분석 결과 조회
+// GET /analysis_info.php?tid={taskid} - 분석 결과 조회
 export async function getAnalysisInfo(taskId: string): Promise<AnalysisInfoResponse> {
-  const response = await fetch(`${API_URL}/api/analysis_info.php?tid=${taskId}`, {
+  const response = await fetch(`${API_URL}/analysis_info.php?tid=${taskId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });

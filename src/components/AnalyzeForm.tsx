@@ -3,7 +3,7 @@ import './AnalyzeForm.css'
 import { submitAnalysis } from '../services/apiService'
 
 interface AnalyzeFormProps {
-  onSubmit: (taskId: string) => void
+  onSubmit: (taskId: string, videoId?: string) => void
 }
 
 function AnalyzeForm({ onSubmit }: AnalyzeFormProps) {
@@ -47,11 +47,11 @@ function AnalyzeForm({ onSubmit }: AnalyzeFormProps) {
     setIsSubmitting(true)
     try {
       const response = await submitAnalysis(videoId)
-      if (response.taskid === -1) {
+      if (response.taskid === -1 || response.taskid === '-1') {
         setError('분석 요청 중 오류가 발생했습니다. 다시 시도해 주세요.')
         return
       }
-      onSubmit(response.taskid as string)
+      onSubmit(String(response.taskid), videoId)
     } catch (err) {
       setError('서버 연결에 실패했습니다. 다시 시도해 주세요.')
     } finally {
