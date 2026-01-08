@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './AnalyzeForm.css'
 import { submitAnalysis } from '../services/apiService'
 
@@ -10,6 +10,20 @@ function AnalyzeForm({ onSubmit }: AnalyzeFormProps) {
   const [youtubeUrl, setYoutubeUrl] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  // URL 해시에서 유튜브 URL 추출하여 자동 입력
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash && hash.length > 1) {
+      // # 다음의 문자열 추출
+      const urlFromHash = hash.substring(1)
+      if (urlFromHash && (urlFromHash.includes('youtube.com') || urlFromHash.includes('youtu.be'))) {
+        setYoutubeUrl(decodeURIComponent(urlFromHash))
+        // 해시 제거 (선택사항)
+        window.history.replaceState(null, '', window.location.pathname)
+      }
+    }
+  }, [])
 
   // Extract video ID from YouTube URL
   const extractVideoId = (url: string): string | null => {
