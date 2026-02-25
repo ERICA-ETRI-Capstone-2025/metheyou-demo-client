@@ -23,7 +23,7 @@ export interface AnalysisInfoResponse {
 
 // POST /ai_request.php - 분석 요청
 export async function submitAnalysis(videoId: string): Promise<SubmitAnalysisResponse> {
-  const response = await fetch(`${API_URL}/ai_request.php`, {
+  const response = await fetch(`${API_URL}/ai_request`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: videoId })
@@ -36,7 +36,7 @@ export async function submitAnalysis(videoId: string): Promise<SubmitAnalysisRes
 
 // GET /ai_status.php?tid={taskid} - 작업 상태 조회
 export async function getTaskStatus(taskId: string): Promise<TaskStatusResponse> {
-  const response = await fetch(`${API_URL}/ai_status.php?tid=${taskId}`, {
+  const response = await fetch(`${API_URL}/ai_status?tid=${taskId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
@@ -48,7 +48,7 @@ export async function getTaskStatus(taskId: string): Promise<TaskStatusResponse>
 
 // GET /analysis_info.php?tid={taskid} - 분석 결과 조회
 export async function getAnalysisInfo(taskId: string): Promise<AnalysisInfoResponse> {
-  const response = await fetch(`${API_URL}/analysis_info.php?tid=${taskId}`, {
+  const response = await fetch(`${API_URL}/analysis_info?tid=${taskId}`, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' }
   });
