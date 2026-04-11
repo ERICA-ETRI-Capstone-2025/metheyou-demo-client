@@ -1,4 +1,5 @@
 import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import AnalyzeForm from './components/AnalyzeForm'
 import ResultsDisplay from './components/ResultsDisplay'
 import Header from './components/Header'
@@ -33,8 +34,24 @@ function App() {
   const location = useLocation()
   const isMainPage = location.pathname === '/'
 
+  useEffect(() => {
+    const bgElem = document.getElementById('dynamic-page-bg')
+    if (bgElem) {
+      if (isMainPage) {
+        bgElem.classList.remove('loaded')
+        // Wait for the fade-out to finish before clearing out the image
+        setTimeout(() => {
+          if (window.location.pathname === '/') {
+            bgElem.style.backgroundImage = 'none'
+          }
+        }, 5000)
+      }
+    }
+  }, [isMainPage])
+
   return (
     <div className="app">
+      <div id="dynamic-page-bg" className="dynamic-page-bg"></div>
       <nav className="navbar">
         <img src={hyXetriLogo} alt="HY x ETRI" className="navbar-logo hy-etri-logo" />
         <img src={etricaLogo} alt="ETRICA" className="navbar-logo etrica-logo" />

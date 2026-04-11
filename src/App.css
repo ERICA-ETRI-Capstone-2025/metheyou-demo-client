@@ -10,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: var(--bg-primary);
+  background-color: color-mix(in srgb, var(--bg-primary) 50%, transparent);
   border-bottom: 1px solid var(--border-secondary);
   transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
@@ -49,6 +49,29 @@
 .main-content.main-content-centered {
   justify-content: center;
   min-height: calc(100vh - 200px);
+}
+
+/* Dynamic Page Background */
+.dynamic-page-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(50px);
+  opacity: 0;
+  transition: opacity 3s;
+  pointer-events: none;
+  /* 살짝 크기를 키워서 블러 가장자리가 화면 밖으로 나가게 처리 (하얀테두리 방지) */
+  transform: scale(1.1);
+}
+
+.dynamic-page-bg.loaded {
+  opacity: 0.3;
 }
 
 /* Footer */
