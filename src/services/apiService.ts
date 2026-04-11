@@ -19,6 +19,11 @@ export interface AnalysisInfoResponse {
   score: number;
   description: string;
   tags: string;
+  feedback?: {
+    upvote: number;
+    downvote: number;
+  };
+  voted?: number;
 }
 
 // POST /ai_request.php - 분석 요청

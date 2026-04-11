@@ -22,6 +22,9 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
   const [isVoting, setIsVoting] = useState(false)
   const [hasVoted, setHasVoted] = useState(false)
   const [toastMessage, setToastMessage] = useState<string | null>(null)
+  
+  const [feedbackCounts, setFeedbackCounts] = useState({ upvote: 0, downvote: 0 })
+  const [userVote, setUserVote] = useState<number>(0)
 
   const showToast = (message: string) => {
     setToastMessage(message)
@@ -81,6 +84,14 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
         }
         setAnalysisResult(response)
         setVideoId(String(response.video_id))
+        
+        if (response.feedback) {
+          setFeedbackCounts(response.feedback)
+        }
+        if (response.voted !== undefined && response.voted !== 0) {
+          setHasVoted(true)
+          setUserVote(response.voted)
+        }
       } catch (err) {
         setError('분석 결과를 불러오는 중 오류가 발생했습니다.')
       }
@@ -169,6 +180,11 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
       if (response.status === 'success') {
         showToast('평가해 주셔서 감사합니다!');
         setHasVoted(true);
+        setUserVote(type === 'upvote' ? 1 : -1);
+        setFeedbackCounts(prev => ({
+          upvote: prev.upvote + (type === 'upvote' ? 1 : 0),
+          downvote: prev.downvote + (type === 'downvote' ? 1 : 0),
+        }));
       }
     } catch (err: any) {
       if (err.status === 400) {
@@ -181,6 +197,22 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
       setIsVoting(false);
     }
   };
+
+  const totalVotes = feedbackCounts.upvote + feedbackCounts.downvote;
+  let feedbackText = "사용자 평가가 아직 없는 비디오예요";
+  let feedbackColorClass = "text-gray";
+  if (totalVotes > 0) {
+    if (feedbackCounts.upvote > feedbackCounts.downvote) {
+      feedbackText = `${totalVotes}명 중 ${feedbackCounts.upvote}명이 유익하다고 판단한 비디오예요`;
+      feedbackColorClass = "text-lightblue";
+    } else if (feedbackCounts.upvote === feedbackCounts.downvote) {
+      feedbackText = `${totalVotes}명 중 절반이 유익하다고 판단한 비디오예요`;
+      feedbackColorClass = "text-gray";
+    } else {
+      feedbackText = `${totalVotes}명 중 ${feedbackCounts.downvote}명이 유해하다고 판단한 비디오예요`;
+      feedbackColorClass = "text-red";
+    }
+  }
 
   return (
     <div className="results-container fade-in">
@@ -214,6 +246,11 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
             <div className="result-score">{analysisResult.score}/100</div>
           </div>
         </div>
+        
+        <div className={`feedback-stats-text ${feedbackColorClass}`}>
+          {feedbackText}
+        </div>
+
         <div className="result-details">
           <div 
             className="detail-item"
@@ -232,7 +269,7 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
           <span className="feedback-text">이 영상, 실제로 어떠셨나요?</span>
           <div className="youtube-pill-container">
             <button 
-              className="youtube-pill-btn left" 
+              className={`youtube-pill-btn left ${userVote === 1 ? 'active' : ''}`} 
               onClick={() => handleVote('upvote')}
               disabled={isVoting || hasVoted}
               title="유익"
@@ -245,7 +282,7 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
             </button>
             <div className="youtube-pill-divider"></div>
             <button 
-              className="youtube-pill-btn right" 
+              className={`youtube-pill-btn right ${userVote === -1 ? 'active' : ''}`} 
               onClick={() => handleVote('downvote')}
               disabled={isVoting || hasVoted}
               title="유해"

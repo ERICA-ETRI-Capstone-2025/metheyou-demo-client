@@ -107,7 +107,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xs);
 }
 
 .check-icon {
@@ -157,6 +157,27 @@
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-weight: 500;
+}
+
+/* Feedback Stats Text */
+.feedback-stats-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  /* padding: var(--spacing-sm); */
+  display: inline-block;
+}
+
+.feedback-stats-text.text-gray {
+  color: #4a4a4aae;
+}
+
+.feedback-stats-text.text-lightblue {
+  color: #0061fdae;
+}
+
+.feedback-stats-text.text-red {
+  color: #ef4444ae;
 }
 
 /* YouTube Style Feedback */
@@ -218,6 +239,17 @@
 .youtube-pill-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.youtube-pill-btn.active {
+  background-color: #e9e9e9;
+  color: #393939;
+  opacity: 1; /* Override disabled opacity for the selected button */
+  font-weight: 800;
+}
+
+.youtube-pill-btn.active:disabled {
+  opacity: 1;
 }
 
 .youtube-pill-divider {
