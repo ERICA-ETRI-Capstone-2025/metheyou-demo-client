@@ -14,6 +14,7 @@
     
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192" />
@@ -22,6 +23,18 @@
     <link rel="apple-touch-icon" href="/icon-192.png" />
     
     <title>믿어유 - AI 기반 유튜브 컨텐츠 분석 솔루션</title>
+    <script>
+      (function() {
+        try {
+          var localTheme = localStorage.getItem('theme');
+          var theme = localTheme || 'auto';
+          var activeTheme = theme === 'auto' 
+            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            : theme;
+          document.documentElement.setAttribute('data-theme', activeTheme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

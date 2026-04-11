@@ -10,7 +10,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: white;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-secondary);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .navbar-logo {

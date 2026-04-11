@@ -34,7 +34,7 @@
 .spinner-small {
   width: 20px;
   height: 20px;
-  border: 3px solid rgba(31, 41, 55, 0.3);
+  border: 3px solid var(--border-overlay);
   border-top-color: var(--text-primary);
   border-radius: 50%;
   animation: spin 0.6s linear infinite;

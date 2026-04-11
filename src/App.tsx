@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate, useParams, useLocation } from 'react-router
 import AnalyzeForm from './components/AnalyzeForm'
 import ResultsDisplay from './components/ResultsDisplay'
 import Header from './components/Header'
+import ThemeSwitcher from './components/ThemeSwitcher'
 import './App.css'
 import hyXetriLogo from './assets/images/hy_x_etri.webp'
 import etricaLogo from './assets/images/etrica.webp'
@@ -56,6 +57,7 @@ function App() {
           </p>
         </footer>
       </div>
+      <ThemeSwitcher />
     </div>
   )
 }
