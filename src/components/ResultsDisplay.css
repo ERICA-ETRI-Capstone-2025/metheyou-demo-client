@@ -8,13 +8,14 @@
 
 /* Video Card */
 .video-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
   display: flex;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
+  margin-top: var(--spacing-lg);
 }
 
 .video-thumbnail {
@@ -61,7 +62,7 @@
 
 /* Loading Message */
 .loading-message {
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-xl);
@@ -97,7 +98,7 @@
 
 /* Result Card */
 .result-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-xl);
@@ -151,8 +152,8 @@
 }
 
 .tag {
-  background: #f3f4f6;
-  color: #6b7280;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
@@ -188,7 +189,7 @@
   gap: 12px;
   margin-top: var(--spacing-lg);
   /* margin-bottom: var(--spacing-md); */
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--bg-tertiary);
   padding-top: var(--spacing-md);
 }
 
@@ -201,7 +202,7 @@
 .youtube-pill-container {
   display: inline-flex;
   align-items: center;
-  background-color: #f2f2f2;
+  background-color: var(--bg-secondary);
   border-radius: 9999px;
   height: 36px;
   overflow: hidden;
@@ -213,7 +214,7 @@
   gap: 6px;
   background: transparent;
   border: none;
-  color: #0f0f0f;
+  color: var(--text-primary);
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
@@ -223,7 +224,7 @@
 }
 
 .youtube-pill-btn:hover:not(:disabled) {
-  background-color: #e5e5e5;
+  background-color: var(--bg-tertiary);
 }
 
 .youtube-pill-btn.left {
@@ -242,8 +243,8 @@
 }
 
 .youtube-pill-btn.active {
-  background-color: #e9e9e9;
-  color: #393939;
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
   opacity: 1; /* Override disabled opacity for the selected button */
   font-weight: 800;
 }
@@ -255,7 +256,7 @@
 .youtube-pill-divider {
   width: 1px;
   height: 24px;
-  background-color: #cccccc;
+  background-color: var(--bg-card-hover);
 }
 
 .youtube-icon {
@@ -268,19 +269,20 @@
   width: 100%;
   margin-top: var(--spacing-lg);
   padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--accent-primary);
-  color: white;
+  background: var(--gradient-primary);
+  color: var(--btn-text);
   border: none;
   border-radius: var(--radius-md);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition-fast), transform var(--transition-fast);
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: var(--shadow-md);
 }
 
 .new-analysis-btn:hover {
-  background: var(--accent-secondary);
   transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
 }
 
 .new-analysis-btn:active {
@@ -289,7 +291,7 @@
 
 /* Error Card */
 .error-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-xl);
@@ -309,8 +311,8 @@
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(31, 41, 55, 0.85);
-  color: white;
+  background: var(--text-primary);
+  color: var(--bg-primary);
   padding: 14px 32px;
   border-radius: 9999px; /* Pill shape */
   font-size: 0.95rem;

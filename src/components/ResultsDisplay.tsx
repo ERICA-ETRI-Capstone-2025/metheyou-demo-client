@@ -101,6 +101,25 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
   }, [done, taskId])
 
   const thumbnailUrl = videoId ? `https://i.ytimg.com/vi/${videoId}/hq720.jpg` : null
+  const displayThumbnailUrl = initialVideoIdState ? `https://i.ytimg.com/vi/${initialVideoIdState}/hq720.jpg` : null
+  const targetThumbnailUrl = done ? thumbnailUrl : displayThumbnailUrl
+
+  useEffect(() => {
+    if (!targetThumbnailUrl) return
+
+    const img = new Image()
+    img.src = targetThumbnailUrl
+    img.onload = () => {
+      const bgElem = document.getElementById('dynamic-page-bg')
+      if (bgElem) {
+        bgElem.style.backgroundImage = `url(${targetThumbnailUrl})`
+        // 짧은 지연 후 opacity 적용 (CSS transition 트리거용)
+        requestAnimationFrame(() => {
+          bgElem.classList.add('loaded')
+        })
+      }
+    }
+  }, [targetThumbnailUrl])
 
   // 에러 상태
   if (error) {
@@ -118,7 +137,6 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
 
   // 진행 중 상태 (done이 아닐 때)
   if (!done) {
-    const displayThumbnailUrl = initialVideoIdState ? `https://i.ytimg.com/vi/${initialVideoIdState}/hq720.jpg` : null
     return (
       <div className="results-container fade-in">
         <div className="loading-message">

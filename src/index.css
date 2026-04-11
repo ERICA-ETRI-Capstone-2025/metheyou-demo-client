@@ -13,6 +13,14 @@
   --accent-warning: #d97706;
   --accent-danger: #dc2626;
   
+  /* Borders */
+  --border-primary: #d1d5db;
+  --border-secondary: #e5e7eb;
+  --border-focus: rgba(31, 41, 55, 0.08);
+  --border-spinner: #e5e7eb;
+  --border-overlay: rgba(255, 255, 255, 0.1);
+  --btn-text: #ffffff;
+  
   /* Text Colors */
   --text-primary: #1f2937;
   --text-secondary: #4b5563;
@@ -47,6 +55,47 @@
   --transition-fast: 0.15s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.5s ease;
+}
+
+[data-theme='dark'] {
+  /* Color Palette - Dark Theme */
+  --bg-primary: #1a1a1c;
+  --bg-secondary: #222224;
+  --bg-tertiary: #2c2c2e;
+  --bg-card: rgba(30, 30, 32, 0.95);
+  --bg-card-hover: rgba(45, 45, 48, 1);
+  
+  /* Accent Colors */
+  --accent-primary: #8e8e93;
+  --accent-secondary: #aeaeb2;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-danger: #ef4444;
+
+  /* Borders */
+  --border-primary: #3a3a3c;
+  --border-secondary: #2c2c2e;
+  --border-focus: rgba(255, 255, 255, 0.1);
+  --border-spinner: #3a3a3c;
+  --border-overlay: rgba(255, 255, 255, 0.05);
+  --btn-text: #f9fafb;
+  
+  /* Text Colors */
+  --text-primary: #f9fafb;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #3a3a3c 0%, #48484a 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  --gradient-bg: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 32px rgba(255, 255, 255, 0.05);
 }
 
 * {
@@ -145,7 +194,7 @@ button {
 
 .btn-primary {
   background: var(--gradient-primary);
-  color: white;
+  color: var(--btn-text);
   box-shadow: var(--shadow-md);
 }
 
@@ -169,9 +218,9 @@ input, textarea {
   font-family: inherit;
   font-size: 1rem;
   padding: var(--spacing-sm) var(--spacing-md);
-  border: 2px solid #d1d5db;
+  border: 2px solid var(--border-primary);
   border-radius: var(--radius-md);
-  background: #ffffff;
+  background: var(--bg-card);
   color: var(--text-primary);
   transition: all var(--transition-normal);
   width: 100%;
@@ -180,13 +229,13 @@ input, textarea {
 input:focus, textarea:focus {
   outline: none;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 4px rgba(31, 41, 55, 0.08);
+  box-shadow: 0 0 0 4px var(--border-focus);
 }
 
 /* Card Component */
 .card {
   background: var(--bg-card);
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-secondary);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
@@ -228,7 +277,7 @@ input:focus, textarea:focus {
 .spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #e5e7eb;
+  border: 4px solid var(--border-spinner);
   border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;

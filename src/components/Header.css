@@ -41,7 +41,7 @@
   left: -0.4rem;
   position: relative;
   font-style: italic;
-  color: #7a7a7a;
+  color: var(--text-secondary);
 }
 
 .subtitle {
