@@ -72,3 +72,29 @@ export function getStatusMessage(status: TaskStatus): string {
   };
   return messages[status] || '처리 중...';
 }
+
+export type FeedbackType = 'upvote' | 'downvote';
+
+export interface FeedbackResponse {
+  status?: string;
+  message?: string;
+  detail?: string;
+}
+
+// POST /feedback/upvote or /feedback/downvote
+export async function submitFeedback(videoId: string, type: FeedbackType): Promise<FeedbackResponse> {
+  const response = await fetch(`${API_URL}/feedback/${type}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ video_id: videoId })
+  });
+  
+  if (!response.ok) {
+    if (response.status === 400) {
+      const errorData = await response.json();
+      throw { status: 400, data: errorData };
+    }
+    throw { status: response.status, data: { detail: 'Internal Server Error' } };
+  }
+  return await response.json();
+}

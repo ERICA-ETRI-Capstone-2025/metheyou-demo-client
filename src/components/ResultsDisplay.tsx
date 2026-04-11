@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './ResultsDisplay.css'
-import { getTaskStatus, getAnalysisInfo, getStatusMessage } from '../services/apiService'
+import { getTaskStatus, getAnalysisInfo, getStatusMessage, submitFeedback } from '../services/apiService'
 import type { TaskStatus, AnalysisInfoResponse } from '../services/apiService'
 
 interface ResultsDisplayProps {
@@ -18,6 +18,17 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
   const [error, setError] = useState<string | null>(null)
   const [videoId, setVideoId] = useState<string | null>(null)
   const [initialVideoIdState] = useState<string | null>(initialVideoId || null)
+  
+  const [isVoting, setIsVoting] = useState(false)
+  const [hasVoted, setHasVoted] = useState(false)
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+
+  const showToast = (message: string) => {
+    setToastMessage(message)
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 3000)
+  }
 
   // 진행 중일 때 5초마다 상태 폴링
   useEffect(() => {
@@ -149,6 +160,28 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
   
   const safetyInfo = getSafetyLevel(analysisResult.score)
 
+  const handleVote = async (type: 'upvote' | 'downvote') => {
+    if (!videoId || isVoting || hasVoted) return;
+
+    setIsVoting(true);
+    try {
+      const response = await submitFeedback(videoId, type);
+      if (response.status === 'success') {
+        showToast('평가해 주셔서 감사합니다!');
+        setHasVoted(true);
+      }
+    } catch (err: any) {
+      if (err.status === 400) {
+        showToast('이미 이 영상에 투표하셨습니다.');
+        setHasVoted(true);
+      } else {
+        showToast('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } finally {
+      setIsVoting(false);
+    }
+  };
+
   return (
     <div className="results-container fade-in">
       {thumbnailUrl && (
@@ -194,10 +227,38 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
             ))}
           </div>
         )}
+        
+        <div className="feedback-container">
+          <p className="feedback-title">이 분석 결과가 도움이 되셨나요?</p>
+          <div className="feedback-buttons">
+            <button 
+              className="feedback-btn upvote" 
+              onClick={() => handleVote('upvote')}
+              disabled={isVoting || hasVoted}
+            >
+              <span className="feedback-icon">👍</span> 좋은 영상이에요
+            </button>
+            <button 
+              className="feedback-btn downvote" 
+              onClick={() => handleVote('downvote')}
+              disabled={isVoting || hasVoted}
+            >
+              <span className="feedback-icon">👎</span> 나쁜 영상이에요
+            </button>
+          </div>
+          {isVoting && <div className="feedback-subtext">처리 중...</div>}
+        </div>
+
         <button className="new-analysis-btn" onClick={onNewAnalysis}>
           다시 분석하기
         </button>
       </div>
+
+      {toastMessage && (
+        <div className="toast-notification">
+          {toastMessage}
+        </div>
+      )}
     </div>
   )
 }

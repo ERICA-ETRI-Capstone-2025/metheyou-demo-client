@@ -159,6 +159,86 @@
   font-weight: 500;
 }
 
+/* Feedback Box */
+.feedback-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: #f9fafb;
+  border-radius: var(--radius-lg);
+  gap: var(--spacing-sm);
+}
+
+.feedback-title {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.feedback-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  width: 100%;
+  justify-content: center;
+}
+
+.feedback-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex: 1;
+  max-width: 200px;
+}
+
+.feedback-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.feedback-btn.upvote {
+  background: white;
+  border: 1px solid #10b981;
+  color: #10b981;
+}
+
+.feedback-btn.upvote:not(:disabled):hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.feedback-btn.downvote {
+  background: white;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+}
+
+.feedback-btn.downvote:not(:disabled):hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.feedback-icon {
+  font-size: 1.2rem;
+}
+
+.feedback-subtext {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
 /* New Analysis Button */
 .new-analysis-btn {
   width: 100%;
@@ -197,6 +277,38 @@
   font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: var(--spacing-lg);
+}
+
+/* Toast Notification */
+.toast-notification {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(31, 41, 55, 0.85);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 9999px; /* Pill shape */
+  font-size: 0.95rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  pointer-events: none;
+  text-align: center;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 /* Responsive */
