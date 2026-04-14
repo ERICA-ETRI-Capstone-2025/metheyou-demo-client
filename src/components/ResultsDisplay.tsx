@@ -205,7 +205,7 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
             downvote: prev.downvote + (type === 'downvote' ? 1 : 0),
           }));
         } else if (action === 'updated') {
-          showToast(`평가가 ${type === 'upvote' ? '유익' : '유해'}로 변경되었습니다.`);
+          showToast(`${type === 'upvote' ? '유익' : '유해'}한 비디오로 변경되었습니다.`);
           setUserVote(type === 'upvote' ? 1 : -1);
           setFeedbackCounts(prev => ({
             upvote: prev.upvote + (type === 'upvote' ? 1 : -1),
