@@ -190,27 +190,39 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
   const safetyInfo = getSafetyLevel(analysisResult.score)
 
   const handleVote = async (type: 'upvote' | 'downvote') => {
-    if (!videoId || isVoting || hasVoted) return;
+    if (!videoId || isVoting) return;
 
     setIsVoting(true);
     try {
       const response = await submitFeedback(videoId, type);
       if (response.status === 'success') {
-        showToast('평가해 주셔서 감사합니다!');
-        setHasVoted(true);
-        setUserVote(type === 'upvote' ? 1 : -1);
-        setFeedbackCounts(prev => ({
-          upvote: prev.upvote + (type === 'upvote' ? 1 : 0),
-          downvote: prev.downvote + (type === 'downvote' ? 1 : 0),
-        }));
+        const action = response.action;
+        if (action === 'added') {
+          showToast('평가해 주셔서 감사합니다!');
+          setUserVote(type === 'upvote' ? 1 : -1);
+          setFeedbackCounts(prev => ({
+            upvote: prev.upvote + (type === 'upvote' ? 1 : 0),
+            downvote: prev.downvote + (type === 'downvote' ? 1 : 0),
+          }));
+        } else if (action === 'updated') {
+          showToast(`평가가 ${type === 'upvote' ? '유익' : '유해'}로 변경되었습니다.`);
+          setUserVote(type === 'upvote' ? 1 : -1);
+          setFeedbackCounts(prev => ({
+            upvote: prev.upvote + (type === 'upvote' ? 1 : -1),
+            downvote: prev.downvote + (type === 'downvote' ? 1 : -1),
+          }));
+        } else if (action === 'removed') {
+          showToast('평가가 취소되었습니다.');
+          setUserVote(0);
+          setFeedbackCounts(prev => ({
+            upvote: prev.upvote - (type === 'upvote' ? 1 : 0),
+            downvote: prev.downvote - (type === 'downvote' ? 1 : 0),
+          }));
+        }
+        setHasVoted(userVote !== 0);
       }
     } catch (err: any) {
-      if (err.status === 400) {
-        showToast('이미 이 영상에 투표하셨습니다.');
-        setHasVoted(true);
-      } else {
-        showToast('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      }
+      showToast('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
     } finally {
       setIsVoting(false);
     }
@@ -289,7 +301,7 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
             <button 
               className={`youtube-pill-btn left ${userVote === 1 ? 'active' : ''}`} 
               onClick={() => handleVote('upvote')}
-              disabled={isVoting || hasVoted}
+              disabled={isVoting}
               title="유익"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="youtube-icon">
@@ -302,7 +314,7 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
             <button 
               className={`youtube-pill-btn right ${userVote === -1 ? 'active' : ''}`} 
               onClick={() => handleVote('downvote')}
-              disabled={isVoting || hasVoted}
+              disabled={isVoting}
               title="유해"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="youtube-icon">
