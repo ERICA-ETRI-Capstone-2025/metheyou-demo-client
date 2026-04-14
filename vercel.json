@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/done/:taskid",
+      "destination": "/api/og-injector"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
