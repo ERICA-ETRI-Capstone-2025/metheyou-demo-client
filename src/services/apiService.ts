@@ -84,6 +84,7 @@ export interface FeedbackResponse {
   status?: string;
   message?: string;
   detail?: string;
+  action?: 'added' | 'updated' | 'removed';
 }
 
 // POST /feedback/upvote or /feedback/downvote
