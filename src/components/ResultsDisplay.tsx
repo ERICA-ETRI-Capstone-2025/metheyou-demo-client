@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import './ResultsDisplay.css'
+import Toast from './Toast'
 import { getTaskStatus, getAnalysisInfo, getStatusMessage, submitFeedback } from '../services/apiService'
 import type { TaskStatus, AnalysisInfoResponse } from '../services/apiService'
 
@@ -21,16 +22,13 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
   
   const [isVoting, setIsVoting] = useState(false)
   const [hasVoted, setHasVoted] = useState(false)
-  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [toastMessage, setToastMessage] = useState<{ message: string; id: number } | null>(null)
   
   const [feedbackCounts, setFeedbackCounts] = useState({ upvote: 0, downvote: 0 })
   const [userVote, setUserVote] = useState<number>(0)
 
   const showToast = (message: string) => {
-    setToastMessage(message)
-    setTimeout(() => {
-      setToastMessage(null)
-    }, 3000)
+    setToastMessage({ message, id: Date.now() })
   }
 
   // 진행 중일 때 5초마다 상태 폴링
@@ -332,9 +330,11 @@ function ResultsDisplay({ taskId, initialVideoId, onNewAnalysis, onDone, done }:
       </div>
 
       {toastMessage && (
-        <div className="toast-notification">
-          {toastMessage}
-        </div>
+        <Toast
+          key={toastMessage.id}
+          message={toastMessage.message}
+          onClose={() => setToastMessage(null)}
+        />
       )}
     </div>
   )
