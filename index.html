@@ -3,12 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Detect AI-generated and dangerous content from YouTube videos" />
+    <meta name="description" content="AI 기반 유튜브 컨텐츠 분석 솔루션" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="믿어유" />
     
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="믿어유 - AI 기반 유튜브 컨텐츠 분석 솔루션" />
-    <meta property="og:description" content="유튜브 영상의 AI 생성 여부와 유해 컨텐츠를 분석합니다" />
+    <meta property="og:description" content="AI 기반 유튜브 컨텐츠 분석 솔루션" />
     <meta property="og:image" content="/og_banner.png" />
     <meta property="og:url" content="https://metheyou.pdj.kr" />
     
@@ -26,12 +29,74 @@
     <script>
       (function() {
         try {
+          var isSharePath = /^\/share\/?$/.test(window.location.pathname);
+          if (!isSharePath) {
+            return;
+          }
+
+          var params = new URLSearchParams(window.location.search);
+          var candidates = [
+            params.get('url') || '',
+            params.get('text') || '',
+            params.get('title') || ''
+          ];
+
+          var extractFirstHttps = function(value) {
+            if (!value) {
+              return null;
+            }
+            var match = value.match(/https:\/\/[^\s"'<>`]+/i);
+            return match ? match[0] : null;
+          };
+
+          var sharedLink = null;
+          for (var i = 0; i < candidates.length; i += 1) {
+            var found = extractFirstHttps(candidates[i]);
+            if (found) {
+              sharedLink = found;
+              break;
+            }
+          }
+
+          if (sharedLink) {
+            window.location.replace('/#' + encodeURIComponent(sharedLink));
+            return;
+          }
+
+          window.location.replace('/');
+        } catch (e) {}
+      })();
+    </script>
+    <script>
+      (function() {
+        try {
+          var THEME_COLORS = {
+            light: '#ffffff',
+            dark: '#1a1a1c'
+          };
+
+          var updateThemeUI = function(activeTheme) {
+            document.documentElement.setAttribute('data-theme', activeTheme);
+            var metaThemeColor = document.querySelector('meta[name="theme-color"]');
+            if (metaThemeColor) {
+              metaThemeColor.setAttribute('content', THEME_COLORS[activeTheme] || THEME_COLORS.light);
+            }
+          };
+
           var localTheme = localStorage.getItem('theme');
           var theme = localTheme || 'auto';
+          var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
           var activeTheme = theme === 'auto' 
-            ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+            ? (mediaQuery.matches ? 'dark' : 'light')
             : theme;
-          document.documentElement.setAttribute('data-theme', activeTheme);
+
+          updateThemeUI(activeTheme);
+
+          if (theme === 'auto') {
+            mediaQuery.addEventListener('change', function(e) {
+              updateThemeUI(e.matches ? 'dark' : 'light');
+            });
+          }
         } catch (e) {}
       })();
     </script>

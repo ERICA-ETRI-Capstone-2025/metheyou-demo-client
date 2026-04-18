@@ -16,11 +16,16 @@ function AnalyzeForm({ onSubmit }: AnalyzeFormProps) {
     const hash = window.location.hash
     if (hash && hash.length > 1) {
       // # 다음의 문자열 추출
-      const urlFromHash = hash.substring(1)
-      if (urlFromHash && (urlFromHash.includes('youtube.com') || urlFromHash.includes('youtu.be'))) {
-        setYoutubeUrl(decodeURIComponent(urlFromHash))
-        // 해시 제거 (선택사항)
-        window.history.replaceState(null, '', window.location.pathname)
+      const hashValue = hash.substring(1)
+      try {
+        const decodedUrl = decodeURIComponent(hashValue)
+        if (decodedUrl && (decodedUrl.includes('youtube.com') || decodedUrl.includes('youtu.be'))) {
+          setYoutubeUrl(decodedUrl)
+          // 해시 제거 (선택사항)
+          window.history.replaceState(null, '', window.location.pathname)
+        }
+      } catch (e) {
+        // malformed URL hash는 무시
       }
     }
   }, [])
