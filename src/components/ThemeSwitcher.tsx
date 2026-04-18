@@ -2,6 +2,17 @@ import { useEffect, useState } from 'react';
 import './ThemeSwitcher.css';
 
 type Theme = 'auto' | 'light' | 'dark';
+const THEME_COLORS: Record<'light' | 'dark', string> = {
+  light: '#ffffff',
+  dark: '#1a1a1c'
+};
+
+function updateThemeColorMeta(activeTheme: 'light' | 'dark') {
+  const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+  if (metaThemeColor) {
+    metaThemeColor.setAttribute('content', THEME_COLORS[activeTheme]);
+  }
+}
 
 export default function ThemeSwitcher() {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -13,15 +24,20 @@ export default function ThemeSwitcher() {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     
     const root = document.documentElement;
+    const applyTheme = (activeTheme: 'light' | 'dark') => {
+      root.setAttribute('data-theme', activeTheme);
+      updateThemeColorMeta(activeTheme);
+    };
+
     if (theme === 'auto') {
-      root.setAttribute('data-theme', mediaQuery.matches ? 'dark' : 'light');
+      applyTheme(mediaQuery.matches ? 'dark' : 'light');
     } else {
-      root.setAttribute('data-theme', theme);
+      applyTheme(theme);
     }
 
     const handleChange = (e: MediaQueryListEvent) => {
       if (theme === 'auto') {
-        root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        applyTheme(e.matches ? 'dark' : 'light');
       }
     };
 
