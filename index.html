@@ -29,6 +29,47 @@
     <script>
       (function() {
         try {
+          var isSharePath = /^\/share\/?$/.test(window.location.pathname);
+          if (!isSharePath) {
+            return;
+          }
+
+          var params = new URLSearchParams(window.location.search);
+          var candidates = [
+            params.get('url') || '',
+            params.get('text') || '',
+            params.get('title') || ''
+          ];
+
+          var extractFirstHttps = function(value) {
+            if (!value) {
+              return null;
+            }
+            var match = value.match(/https:\/\/[^\s"'<>`]+/i);
+            return match ? match[0] : null;
+          };
+
+          var sharedLink = null;
+          for (var i = 0; i < candidates.length; i += 1) {
+            var found = extractFirstHttps(candidates[i]);
+            if (found) {
+              sharedLink = found;
+              break;
+            }
+          }
+
+          if (sharedLink) {
+            window.location.replace('/#' + encodeURIComponent(sharedLink));
+            return;
+          }
+
+          window.location.replace('/');
+        } catch (e) {}
+      })();
+    </script>
+    <script>
+      (function() {
+        try {
           var THEME_COLORS = {
             light: '#ffffff',
             dark: '#1a1a1c'

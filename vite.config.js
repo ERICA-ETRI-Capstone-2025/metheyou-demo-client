@@ -18,6 +18,16 @@ export default defineConfig({
         lang: 'ko',
         start_url: '/',
         scope: '/',
+        share_target: {
+          action: '/share',
+          method: 'GET',
+          enctype: 'application/x-www-form-urlencoded',
+          params: {
+            title: 'title',
+            text: 'text',
+            url: 'url'
+          }
+        },
         icons: [
           {
             src: 'icon-512.png',
