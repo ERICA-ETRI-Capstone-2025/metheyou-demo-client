@@ -131,4 +131,4 @@ VITE_API_URL=http://your-api-server:8000
 
 ## 라이선스
 
-This project is part of the ERICA-ETRI Capstone 2025 program.
+This project is part of the ERICA-ETRI Capstone 2025-2026 program.
